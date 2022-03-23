@@ -28,16 +28,16 @@ class BDDDataset(data.Dataset):
 
         if self.train:
             label_path = glob.glob(
-                os.path.join(self.root, '*.json'))
+                os.path.join(self.root, 'training_masks/*.json'))
             image_dir = os.path.join(self.root, '')
             image_paths = glob.glob(
-                os.path.join(self.root, '*.jpg'))
+                os.path.join(self.root, 'training_images/*.jpg'))
         else:
             label_path = glob.glob(
-                os.path.join(self.root, '*.json'))
+                os.path.join(self.root, 'testing_masks/*.json'))
             image_dir = os.path.join(self.root, '')
             image_paths = glob.glob(
-                os.path.join(self.root, '*.jpg'))
+                os.path.join(self.root, 'testing_images/*.jpg'))
 
         for image_path in image_paths:
 
@@ -53,7 +53,7 @@ class BDDDataset(data.Dataset):
 
         image = pil_loader(image_path)
         loaded_json = load_json(label_path)
-        #something is wrong here
+        
         for frame in loaded_json['frames']:
             name = frame['name']
             if name[name.rfind('/')+1] == image_path[image_path.rfind('/')+1]:
@@ -72,8 +72,9 @@ def main():
     from torchvision import transforms
     transform = transforms.Compose(
         [transforms.Resize(64), transforms.ToTensor()])
+    #must supply your path to the data
     loader = data.DataLoader(
-        BDDDataset(r'data/EVMS1/EMS Real 1/', transform=transform),
+        BDDDataset(r'/Users/carsonstillman/data/Epiglottis_Data/', transform=transform),
         batch_size=1,
         shuffle=True)
 
