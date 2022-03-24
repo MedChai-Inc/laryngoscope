@@ -5,7 +5,8 @@ from PIL import Image
 from torch.utils import data
 from torchvision.datasets.folder import pil_loader
 
-class BDDDataset(data.Dataset):
+class ETIDataset(data.Dataset):
+    '''This dataset returns and Image and a bit mask both as Images or as specified by the transformation.'''
 
     def __init__(self, root, train=True, transform=None):
         self.root = root
@@ -19,8 +20,11 @@ class BDDDataset(data.Dataset):
         self.samples = []
 
         if self.train:
+            #add all of the file in the training mask folder to a list
             label_path = glob.glob(
                 os.path.join(self.root, 'training_masks/*.jpg'))
+
+            #add all of the file in the trainging image folder to a list
             image_dir = os.path.join(self.root, '')
             image_paths = glob.glob(
                 os.path.join(self.root, 'training_images/*.jpg'))
@@ -34,15 +38,13 @@ class BDDDataset(data.Dataset):
                 os.path.join(self.root, 'testing_images/*.jpg'))
 
         for image_path in image_paths:
-
+            #add both the label_path and the image_path to the sample list
             if os.path.exists(image_path):
                 self.samples.append((image_path, label_path))
             else:
                 raise FileNotFoundError
 
     def __getitem__(self, index):
-        # TODO: handle label dict
-
         image_path, label_path = self.samples[index]
 
         image = pil_loader(image_path)
@@ -57,7 +59,7 @@ class BDDDataset(data.Dataset):
         #load the label as an image
         label = pil_loader(label)
         if self.transform is not None:
-            # not sure whether or not to transform the label
+            #not sure whether or not to transform the label
             image = self.transform(image)
             label = self.transform(label)
 
@@ -73,7 +75,7 @@ def main():
         [transforms.Resize(64), transforms.ToTensor()])
     #must supply your path to the data
     loader = data.DataLoader(
-        BDDDataset(r'/Users/carsonstillman/data/Epiglottis_Data/', transform=transform),
+        ETIDataset(r'/Users/carsonstillman/data/Epiglottis_Data/', transform=transform),
         batch_size=1,
         shuffle=True)
 
@@ -81,8 +83,8 @@ def main():
     for i, (x, y) in enumerate(loader):
         count+=1
         print(x.size())
-        print(y)
-        if count>1:
+        print(y.size())
+        if count>=1:
             break
 
 
