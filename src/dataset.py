@@ -25,8 +25,10 @@ class BDDDataset(data.Dataset):
             image_paths = glob.glob(
                 os.path.join(self.root, 'training_images/*.jpg'))
         else:
+            #add all of the file in the testing mask folder to a list
             label_path = glob.glob(
                 os.path.join(self.root, 'testing_masks/*.jpg'))
+            #add all of the file in the testing image folder to a list
             image_dir = os.path.join(self.root, '')
             image_paths = glob.glob(
                 os.path.join(self.root, 'testing_images/*.jpg'))
@@ -34,7 +36,7 @@ class BDDDataset(data.Dataset):
         for image_path in image_paths:
 
             if os.path.exists(image_path):
-                self.samples.append((image_path, label_path[0]))
+                self.samples.append((image_path, label_path))
             else:
                 raise FileNotFoundError
 
@@ -44,8 +46,15 @@ class BDDDataset(data.Dataset):
         image_path, label_path = self.samples[index]
 
         image = pil_loader(image_path)
+        label = None
         
-                
+        for mask in label_path:
+            if mask.rsplit('/')[-1] == image_path.rsplit('/')[-1]:
+                label = mask
+                break
+
+        print("image "+image_path)
+        print("label "+label)        
         if self.transform is not None:
             image = self.transform(image)
 
