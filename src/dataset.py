@@ -48,15 +48,18 @@ class BDDDataset(data.Dataset):
         image = pil_loader(image_path)
         label = None
         
+        #find the right label to match the image
         for mask in label_path:
             if mask.rsplit('/')[-1] == image_path.rsplit('/')[-1]:
                 label = mask
                 break
-
-        print("image "+image_path)
-        print("label "+label)        
+        
+        #load the label as an image
+        label = pil_loader(label)
         if self.transform is not None:
+            # not sure whether or not to transform the label
             image = self.transform(image)
+            label = self.transform(label)
 
         return image, label
 
