@@ -25,7 +25,6 @@ class ETIDataset(data.Dataset):
                 os.path.join(self.root, 'training_masks/*.jpg'))
 
             #add all of the file in the trainging image folder to a list
-            image_dir = os.path.join(self.root, '')
             image_paths = glob.glob(
                 os.path.join(self.root, 'training_images/*.jpg'))
         else:
@@ -33,7 +32,6 @@ class ETIDataset(data.Dataset):
             label_path = glob.glob(
                 os.path.join(self.root, 'testing_masks/*.jpg'))
             #add all of the file in the testing image folder to a list
-            image_dir = os.path.join(self.root, '')
             image_paths = glob.glob(
                 os.path.join(self.root, 'testing_images/*.jpg'))
 
