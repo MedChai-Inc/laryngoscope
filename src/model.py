@@ -27,18 +27,19 @@ class UNet(nn.Module):
 class Block(nn.Module):
     def __init__(self, in_ch, out_ch):
         super().__init__()
-        self.conv1 = nn.Conv2d(in_ch, out_ch, 3)
+        self.conv1 = nn.Conv2d(in_ch, out_ch, (2,3))
         self.relu  = nn.ReLU()
-        self.conv2 = nn.Conv2d(out_ch, out_ch, 3)
+        self.conv2 = nn.Conv2d(out_ch, out_ch, (2,3))
     
     def forward(self, x):
+        print('here')
         return self.relu(self.conv2(self.relu(self.conv1(x))))
 
 class Encoder(nn.Module):
     def __init__(self, chs=(3,64,128,256,512,1024)):
         super().__init__()
         self.enc_blocks = nn.ModuleList([Block(chs[i], chs[i+1]) for i in range(len(chs)-1)])
-        self.pool = nn.MaxPool2d(3)
+        self.pool = nn.MaxPool2d(2)
     
     def forward(self, x):
         ftrs = []
@@ -52,8 +53,8 @@ class Decoder(nn.Module):
     #look here
     def __init__(self, chs=(1024, 512, 256, 128, 64)):
         super().__init__()
-        self.chs         = chs
-        self.upconvs    = nn.ModuleList([nn.ConvTranspose2d(chs[i], chs[i+1], 2, 2) for i in range(len(chs)-1)])
+        self.chs = chs
+        self.upconvs = nn.ModuleList([nn.ConvTranspose2d(chs[i], chs[i+1], 2, 2) for i in range(len(chs)-1)])
         self.dec_blocks = nn.ModuleList([Block(chs[i], chs[i+1]) for i in range(len(chs)-1)]) 
         
     def forward(self, x, encoder_features):
