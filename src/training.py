@@ -74,8 +74,8 @@ def main():
         test_loop(test_dataloader, model, loss_fn)
     print("Done!")
 
-    #PATH = './object_detection.pth'
-    #torch.save(model.state_dict(), PATH)
+    PATH = './object_detection.pth'
+    torch.save(model.state_dict(), PATH)
 
 if __name__=='__main__':
     main()
