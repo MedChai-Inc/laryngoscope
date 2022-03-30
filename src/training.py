@@ -12,6 +12,7 @@ def train_loop(dataloader, model, loss_fn, optimizer):
     for batch, (X, y) in enumerate(dataloader):
         # Compute prediction and loss
         pred = model(X)
+        y = torch.argmax(y,1)
         loss = loss_fn(pred, y)
 
         # Backpropagation
@@ -45,12 +46,12 @@ def main():
     model = UNet()
 
     #define variables for ML
-    learning_rate = 1e-3
-    batch_size = 100
+    learning_rate = .01
+    batch_size = 2
     epochs = 5
 
     #compose the all transformation
-    transform = transforms.ToTensor()
+    transform = transforms.Compose([transforms.ToTensor()])
 
     #define the training dataset and the testing dataset
     training_data = dataset.ETIDataset(

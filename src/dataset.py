@@ -5,6 +5,12 @@ from PIL import Image
 from torch.utils import data
 from torchvision.datasets.folder import pil_loader
 
+from torchvision import transforms
+
+import torch.nn.functional as F
+from torch import from_numpy
+import numpy as np
+
 class ETIDataset(data.Dataset):
     '''This dataset returns and Image and a bit mask both as Images or as specified by the transformation.'''
 
@@ -56,6 +62,7 @@ class ETIDataset(data.Dataset):
         
         #load the label as an image
         label = pil_loader(label)
+
         if self.transform is not None:
             #not sure whether or not to transform the label
             image = self.transform(image)
@@ -68,7 +75,6 @@ class ETIDataset(data.Dataset):
 
 
 def main():
-    from torchvision import transforms
     transform = transforms.Compose(
         [transforms.Resize(64), transforms.ToTensor()])
     #must supply your path to the data
