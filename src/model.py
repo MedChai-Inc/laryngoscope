@@ -32,7 +32,6 @@ class Block(nn.Module):
         self.conv2 = nn.Conv2d(out_ch, out_ch, (2,3))
     
     def forward(self, x):
-        print('here')
         return self.relu(self.conv2(self.relu(self.conv1(x))))
 
 class Encoder(nn.Module):

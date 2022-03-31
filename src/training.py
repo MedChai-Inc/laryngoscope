@@ -51,7 +51,7 @@ def main():
     epochs = 5
 
     #compose the all transformation
-    transform = transforms.Compose([transforms.ToTensor()])
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Resize((572,572))])
 
     #define the training dataset and the testing dataset
     training_data = dataset.ETIDataset(
